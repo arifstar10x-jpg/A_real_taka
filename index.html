@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>টাকার মেলা বিডি</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Adsgram SDK Script Integration -->
+  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -241,7 +245,7 @@
     </div>
 
     <!-- Active Button -->
-    <div class="btn-active">
+    <div class="btn-active" id="show-ad-btn">
       ফ্রি অ্যাকাউন্ট এক্টিভ করুন <i class="fa-solid fa-bolt"></i>
     </div>
 
@@ -322,6 +326,29 @@
       <div class="nav-title-en">Account</div>
     </a>
   </div>
+
+  <!-- Adsgram Trigger Script -->
+  <script>
+    // Adsgram Controller Initialization with Placement ID 43146
+    const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "43146" }) : null;
+
+    const adBtn = document.getElementById('show-ad-btn');
+    if (adBtn) {
+      adBtn.addEventListener('click', () => {
+        if (AdController) {
+          AdController.show().then((result) => {
+            // বিজ্ঞাপনের পর আপনার যা কাজ তা সফল হলে
+            alert('বিজ্ঞাপনটি সফলভাবে দেখা হয়েছে!');
+          }).catch((result) => {
+            // বিজ্ঞাপন না দেখা গেলে বা কোনো ভুল হলে
+            console.log('Ad error or skipped:', result);
+          });
+        } else {
+          alert('Adsgram SDK পাওয়া যায়নি।');
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>
