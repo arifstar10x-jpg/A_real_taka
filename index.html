@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earning Mini App</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+        }
+        .balance-card {
+            background: linear-gradient(135deg, #0088cc, #005588);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .balance-card h2 { margin: 0; font-size: 16px; opacity: 0.9; }
+        .balance-card h1 { margin: 10px 0 0 0; font-size: 32px; }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .btn {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:active { background-color: #0088cc; }
+    </style>
+</head>
+<body>
+
+    <div class="balance-card">
+        <h2>আপনার মূল ব্যালেন্স</h2>
+        <h1 id="user-balance">৳0.00</h1>
+    </div>
+
+    <div class="grid">
+        <button class="btn" onclick="showTask()">📋 টাস্ক লিস্ট</button>
+        <button class="btn" onclick="claimDaily()">🎁 ডেইলি বোনাস</button>
+        <button class="btn" onclick="showInvite()">👥 ইনভাইট করুন</button>
+        <button class="btn" onclick="showWithdraw()">💳 উইথড্র</button>
+        <button class="btn" onclick="showProfile()">👤 প্রোফাইল</button>
+        <button class="btn" onclick="contactAdmin()">🎧 এডমিন সাপোর্ট</button>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let balance = 0.00;
+
+        function updateBalanceDisplay() {
+            document.getElementById('user-balance').innerText = '৳' + balance.toFixed(2);
+        }
+
+        function claimDaily() {
+            balance += 0.50;
+            updateBalanceDisplay();
+            tg.showAlert("🎉 আপনি ৳০.৫০ ডেইলি বোনাস পেয়েছেন!");
+        }
+
+        function showTask() {
+            tg.showAlert("📋 টাস্ক অপশন খুলছে...");
+        }
+
+        function showInvite() {
+            const userId = tg.initDataUnsafe?.user?.id || "12345";
+            const refLink = `https://t.me/YourBotUsername_bot?start=${userId}`;
+            tg.showAlert(`🔗 আপনার রেফারেল লিংক:\n${refLink}`);
+        }
+
+        function showWithdraw() {
+            if (balance < 5.0) {
+                tg.showAlert("❌ উইথড্র করতে সর্বনিম্ন ৳৫.০০ লাগবে!");
+            } else {
+                tg.showAlert("💳 আপনার উইথড্র রিকোয়েস্ট জমা নেওয়া হয়েছে।");
+            }
+        }
+
+        function showProfile() {
+            const user = tg.initDataUnsafe?.user;
+            const name = user ? user.first_name : "ইউজার";
+            tg.showAlert(`👤 নাম: ${name}\n💰 ব্যালেন্স: ৳${balance.toFixed(2)}`);
+        }
+
+        function contactAdmin() {
+            tg.openTelegramLink("https://t.me/YourAdminUsername");
+        }
+    </script>
+</body>
+  </html>
+  
