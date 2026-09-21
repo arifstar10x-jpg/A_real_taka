@@ -1,110 +1,327 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earning Mini App</title>
-    <!-- Telegram WebApp SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            margin: 0;
-            padding: 15px;
-            text-align: center;
-        }
-        .balance-card {
-            background: linear-gradient(135deg, #0088cc, #005588);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
-        .balance-card h2 { margin: 0; font-size: 16px; opacity: 0.9; }
-        .balance-card h1 { margin: 10px 0 0 0; font-size: 32px; }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        .btn {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 15px;
-            color: #fff;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn:active { background-color: #0088cc; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>টাকার মেলা বিডি</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f6f7fb;
+      color: #333;
+      padding-bottom: 90px;
+    }
+    
+    /* Top Header */
+    .header {
+      background-color: #ffffff;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+    .header-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #111;
+    }
+    .header-icons i {
+      font-size: 22px;
+      margin-left: 15px;
+      cursor: pointer;
+    }
+
+    .container {
+      padding: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* User Profile Bar */
+    .user-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background-color: #5c6bc0;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-right: 12px;
+    }
+    .user-id {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    /* Banner Image/Box */
+    .banner {
+      width: 100%;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .banner img {
+      width: 100%;
+      display: block;
+    }
+
+    /* Active Button */
+    .btn-active {
+      background: linear-gradient(135deg, #6a1b9a, #4a148c);
+      color: white;
+      text-align: center;
+      padding: 16px;
+      border-radius: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(106, 27, 154, 0.3);
+      margin-bottom: 25px;
+      cursor: pointer;
+    }
+
+    /* Section Title */
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #4a148c;
+      margin-bottom: 15px;
+    }
+
+    /* 2x2 Grid Layout */
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .grid-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 20px 10px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .icon-circle {
+      width: 60px;
+      height: 60px;
+      background-color: #f0e6ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      color: #6a1b9a;
+      margin-bottom: 10px;
+    }
+    .card-title-en {
+      font-size: 20px;
+      font-weight: bold;
+      color: #4a148c;
+    }
+    .card-title-bn {
+      font-size: 16px;
+      font-weight: bold;
+      color: #4a148c;
+      margin-bottom: 4px;
+    }
+    .card-subtext {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0 8px 0;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .nav-item {
+      text-align: center;
+      color: #6a1b9a;
+      text-decoration: none;
+      flex: 1;
+    }
+    .nav-item i {
+      font-size: 24px;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .nav-title-en {
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .nav-title-bn {
+      font-size: 10px;
+      color: #666;
+    }
+
+    /* Floating Center Plus Button */
+    .floating-btn {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #ff5252, #ff1744);
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 10px rgba(255, 23, 68, 0.4);
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+    .nav-center-wrapper {
+      position: relative;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="balance-card">
-        <h2>আপনার মূল ব্যালেন্স</h2>
-        <h1 id="user-balance">৳0.00</h1>
+  <!-- Header Section -->
+  <div class="header">
+    <div class="header-title">টাকার মেলা বিডি</div>
+    <div class="header-icons">
+      <i class="fa-solid fa-xmark"></i>
+      <i class="fa-solid fa-ellipsis-vertical"></i>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- User Info Section -->
+    <div class="user-info">
+      <div class="user-avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="user-id">ইউজার আইডি: ১২৩৪৫৬৭৮৯</div>
     </div>
 
-    <div class="grid">
-        <button class="btn" onclick="showTask()">📋 টাস্ক লিস্ট</button>
-        <button class="btn" onclick="claimDaily()">🎁 ডেইলি বোনাস</button>
-        <button class="btn" onclick="showInvite()">👥 ইনভাইট করুন</button>
-        <button class="btn" onclick="showWithdraw()">💳 উইথড্র</button>
-        <button class="btn" onclick="showProfile()">👤 প্রোফাইল</button>
-        <button class="btn" onclick="contactAdmin()">🎧 এডমিন সাপোর্ট</button>
+    <!-- Banner Section -->
+    <div class="banner">
+      <img src="https://via.placeholder.com/600x250/311b92/ffffff?text=%E0%A6%9F%E0%A6%BE%E0%A6%95%E0%A6%BE%E0%A6%B0+%E0%A6%AE%E0%A6%AF%E0%A6%BF%E0%A6%B2%E0%A6%BE+%E0%A6%AC%E0%A6%BF%E0%A6%A1%E0%A6%BF+%E0%A6%B0%E0%A7%87%E0%A6%AB%E0%A6%BE%E0%A6%B0+%E0%A6%95%E0%A6%B0%E0%A7%81%E0%A6%A8" alt="Banner">
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+    <!-- Active Button -->
+    <div class="btn-active">
+      ফ্রি অ্যাকাউন্ট এক্টিভ করুন <i class="fa-solid fa-bolt"></i>
+    </div>
 
-        let balance = 0.00;
+    <!-- Section Title -->
+    <div class="section-title">আমাদের বিশেষ সুবিধাসমূহ</div>
 
-        function updateBalanceDisplay() {
-            document.getElementById('user-balance').innerText = '৳' + balance.toFixed(2);
-        }
+    <!-- 2x2 Options Grid -->
+    <div class="grid-container">
+      <!-- Earn Card -->
+      <div class="grid-card">
+        <div class="icon-circle">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </div>
+        <div class="card-title-en">Earn</div>
+        <div class="card-title-bn">ইনকাম</div>
+        <div class="card-subtext">সকল উপায় ইনকাম</div>
+      </div>
 
-        function claimDaily() {
-            balance += 0.50;
-            updateBalanceDisplay();
-            tg.showAlert("🎉 আপনি ৳০.৫০ ডেইলি বোনাস পেয়েছেন!");
-        }
+      <!-- Task Card -->
+      <div class="grid-card">
+        <div class="icon-circle">
+          <i class="fa-solid fa-clipboard-list"></i>
+        </div>
+        <div class="card-title-en">Task</div>
+        <div class="card-title-bn">টাস্ক</div>
+        <div class="card-subtext">প্রতিদিন কাজক</div>
+      </div>
 
-        function showTask() {
-            tg.showAlert("📋 টাস্ক অপশন খুলছে...");
-        }
+      <!-- Invite Card -->
+      <div class="grid-card">
+        <div class="icon-circle">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="card-title-en">Invite</div>
+        <div class="card-title-bn">ইনভাইট</div>
+        <div class="card-subtext">রেফারার বোনাসেস</div>
+      </div>
 
-        function showInvite() {
-            const userId = tg.initDataUnsafe?.user?.id || "12345";
-            const refLink = `https://t.me/YourBotUsername_bot?start=${userId}`;
-            tg.showAlert(`🔗 আপনার রেফারেল লিংক:\n${refLink}`);
-        }
+      <!-- Withdraw Card -->
+      <div class="grid-card">
+        <div class="icon-circle">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+        <div class="card-title-en">Withdraw</div>
+        <div class="card-title-bn">উইথড্র</div>
+        <div class="card-subtext">ফাস্ট আইথড্র</div>
+      </div>
+    </div>
+  </div>
 
-        function showWithdraw() {
-            if (balance < 5.0) {
-                tg.showAlert("❌ উইথড্র করতে সর্বনিম্ন ৳৫.০০ লাগবে!");
-            } else {
-                tg.showAlert("💳 আপনার উইথড্র রিকোয়েস্ট জমা নেওয়া হয়েছে।");
-            }
-        }
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item">
+      <i class="fa-solid fa-house"></i>
+      <div class="nav-title-en">Home</div>
+    </a>
 
-        function showProfile() {
-            const user = tg.initDataUnsafe?.user;
-            const name = user ? user.first_name : "ইউজার";
-            tg.showAlert(`👤 নাম: ${name}\n💰 ব্যালেন্স: ৳${balance.toFixed(2)}`);
-        }
+    <a href="#" class="nav-item">
+      <i class="fa-solid fa-calendar-check"></i>
+      <div class="nav-title-en">Daily Checkin</div>
+      <div class="nav-title-bn">ডেইলি চেকিং</div>
+    </a>
 
-        function contactAdmin() {
-            tg.openTelegramLink("https://t.me/YourAdminUsername");
-        }
-    </script>
+    <div class="nav-center-wrapper">
+      <div class="floating-btn">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+    </div>
+
+    <a href="#" class="nav-item">
+      <i class="fa-solid fa-headset"></i>
+      <div class="nav-title-en">Admin Support</div>
+      <div class="nav-title-bn">এডমিন সাপোর্ট</div>
+    </a>
+
+    <a href="#" class="nav-item">
+      <i class="fa-solid fa-user"></i>
+      <div class="nav-title-en">Account</div>
+    </a>
+  </div>
+
 </body>
-  </html>
-  
+</html>
